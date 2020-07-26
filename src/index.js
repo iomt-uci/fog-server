@@ -21,12 +21,12 @@ const server = require('http').createServer(app);
 
 
 // ========================== socket.io ==========================
-// const io = require('socket.io').listen(server);
+const io = require('socket.io').listen(server);
 
-// // connect socket.io
-// io.on("connection", socket => {
-//   console.log("a user has connected");
-// });
+// connect socket.io
+io.on("connection", socket => {
+  console.log("a user has connected");
+});
 
 
 // ========================== Mongo ==========================
@@ -54,26 +54,32 @@ mongoose.connection.on("error", (err) => {
 
 // ========================== Redis ==========================
 
-// redis config
-// const redisPort = 6379;
-// const host = "127.0.0.1";
+redis config
+const redisPort = 6379;
+const host = "127.0.0.1";
 
-// // redis client
-// const redis = require('redis');
-// const client = redis.createClient(redisPort, host);
+// redis client
+const redis = require('redis');
+const client = redis.createClient(redisPort, host);
 
-// // client listening messages
-// client.on('message', function(channel, message) {
-//     console.log('from channel ' + channel + ": " + message);
-//     const msg = JSON.parse(message);
-//     io.send(msg);
-// });
+// client listening messages
+client.on('message', function(channel, message) {
+    console.log('from channel ' + channel + ": " + message);
 
-// client.subscribe('heart-rate');
 
-app.get("/", requireAuth, (req, res) => {
-  res.send(`Your email: ${req.user.email}`);
+    //////// TODO: require additional parsings for messages ///////////
+
+    // socket.io to send message (preferably in json format)
+    io.send(message);
 });
+
+client.subscribe('heart-rate');
+
+// feel free to disable login for testing purposes
+
+// app.get("/", requireAuth, (req, res) => {
+//   res.send(`Your email: ${req.user.email}`);
+// });
 
 // start server on port 8000
 server.listen(8000, () => console.log("server running on port 8000"));
