@@ -22,7 +22,13 @@ const userSchema = new mongoose.Schema({
   phoneNum: {
     type: String,
     required: true
+  },
+  deviceId: {
+    type: String,
+    required: true,
+    default: '0'
   }
+
 });
 
 userSchema.pre('save', function(next) {

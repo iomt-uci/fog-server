@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
+const connectRoutes = require("./routes/connectRoutes");
 const trackRoutes = require("./routes/trackRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(authRoutes);
+app.use(connectRoutes);
 app.use(trackRoutes);
 
 // http server for socket.io
@@ -19,12 +21,12 @@ const server = require('http').createServer(app);
 
 
 // ========================== socket.io ==========================
-const io = require('socket.io').listen(server);
+// const io = require('socket.io').listen(server);
 
-// connect socket.io
-io.on("connection", socket => {
-  console.log("a user has connected");
-});
+// // connect socket.io
+// io.on("connection", socket => {
+//   console.log("a user has connected");
+// });
 
 
 // ========================== Mongo ==========================
@@ -53,21 +55,21 @@ mongoose.connection.on("error", (err) => {
 // ========================== Redis ==========================
 
 // redis config
-const redisPort = 6379;
-const host = "127.0.0.1";
+// const redisPort = 6379;
+// const host = "127.0.0.1";
 
-// redis client
-const redis = require('redis');
-const client = redis.createClient(redisPort, host);
+// // redis client
+// const redis = require('redis');
+// const client = redis.createClient(redisPort, host);
 
-// client listening messages
-client.on('message', function(channel, message) {
-    console.log('from channel ' + channel + ": " + message);
-    const msg = JSON.parse(message);
-    io.send(msg);
-});
+// // client listening messages
+// client.on('message', function(channel, message) {
+//     console.log('from channel ' + channel + ": " + message);
+//     const msg = JSON.parse(message);
+//     io.send(msg);
+// });
 
-client.subscribe('heart-rate');
+// client.subscribe('heart-rate');
 
 app.get("/", requireAuth, (req, res) => {
   res.send(`Your email: ${req.user.email}`);
