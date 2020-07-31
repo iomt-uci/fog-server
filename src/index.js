@@ -106,6 +106,7 @@ client.on('message', function(channel, message) {
 
         // a new room has been detected, update wait time for the old room
         // Note: only update when none of fields are missing
+        // 6 elements are: patientName, deviceId, bpm, alarm, location, startTime
         if (Object.keys(dataStream[list[0]]).length === 6) {
             const filter = {
                 patientId: list[0], 
@@ -187,6 +188,8 @@ client.on('message', function(channel, message) {
     }
 
     // socket.io to send message (preferably in json format)
+    // Note: only update when none of the elements are missing
+    // 6 elements are: patientName, deviceId, bpm, alarm, location, startTime
     if (Object.keys(dataStream[list[0]]).length === 6) {
         const json_str = { patientId: list[0], ...dataStream[list[0]] };
         console.log(json_str);
