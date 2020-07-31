@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const connectRoutes = require("./routes/connectRoutes");
 const trackRoutes = require("./routes/trackRoutes");
+const historyRoutes = require('./routes/historyRoutes');
 const requireAuth = require("./middlewares/requireAuth");
 
 // get the day model
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({
 app.use(authRoutes);
 app.use(connectRoutes);
 app.use(trackRoutes);
-
+app.use(historyRoutes);
 
 // http server for socket.io
 const server = require('http').createServer(app);
