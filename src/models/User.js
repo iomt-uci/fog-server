@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: '0'
+  },
+  isCalling: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 
 });
