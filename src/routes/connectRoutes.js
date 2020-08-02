@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
 
-const User = mongoose.model("User");
+const Patient = mongoose.model("Patient");
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get("/patient-connect", async (req, res) => {
   const edgeId = req.query.edgeId;
 
   try {
-    const patient = await User.findOne({ deviceId: edgeId });
+    const patient = await Patient.findOne({ deviceId: edgeId });
     const patient_id = patient._id;
     const patient_name = patient.firstName + " " + patient.lastName;
     const isCalling = patient.isCalling;
@@ -35,7 +35,7 @@ router.post("/patient-connect", async (req, res) => {
   }
 
   try {
-    const patient = await User.findOne({ phoneNum: phoneNumInput });
+    const patient = await Patient.findOne({ phoneNum: phoneNumInput });
 
     patient.deviceId = deviceIdInput;
 
@@ -56,7 +56,7 @@ router.post("/patient-disconnect", async (req, res) => {
   }
 
   try {
-    const patient = await User.findOne({ deviceId: deviceIdInput });
+    const patient = await Patient.findOne({ deviceId: deviceIdInput });
 
     patient.deviceId = "0";
 

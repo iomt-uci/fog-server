@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
+const Staff = mongoose.model('Staff');
+const Patient = mongoose.model('Patient');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -18,8 +19,15 @@ module.exports = (req, res, next) => {
 
     const { userId } = payload;
 
-    const user = await User.findById(userId);
-    req.user = user;
-    next();
+    // if not found in Staff, try Patient
+    try {
+      const user = await Staff.findById(userId);
+      req.user = user;
+      next();
+    } catch (err) {
+      const user = await Patient.findById(userId);
+      req.user = user;
+      next();
+    }
   });
 };

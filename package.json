@@ -16,6 +16,7 @@
     "lodash": "^4.17.19",
     "minimist": "^1.2.5",
     "mongoose": "^5.9.25",
+    "ngrok": "^3.2.7",
     "nodemon": "^1.19.4",
     "redis": "^3.0.2",
     "socket.io": "^2.3.0"

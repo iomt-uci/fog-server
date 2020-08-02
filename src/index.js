@@ -1,4 +1,5 @@
-require("./models/User");
+require("./models/Patient");
+require("./models/Staff");
 require("./models/Track");
 require("./models/Day");
 const express = require("express");
@@ -42,7 +43,7 @@ io.on("connection", socket => {
 // const mongoUri =
 //   "mongodb+srv://jay:,,mnz114@cluster0.jnkql.mongodb.net/<dbname>?retryWrites=true&w=majority";
 const mongoUri =
-    "mongodb+srv://xhl:wait4it@cluster0.njtgk.mongodb.net/fog?retryWrites=true&w=majority";
+    "mongodb+srv://heart_rate:heart@cluster0.hpfhg.mongodb.net/fog?retryWrites=true&w=majority";
 if (!mongoUri) {    
     throw new Error(
         `MongoURI was not supplied. Make sure you watch the video on setting up Mongo DB!`
@@ -203,9 +204,9 @@ client.subscribe('heart-rate');
 
 // feel free to disable login for testing purposes
 
-// app.get("/", requireAuth, (req, res) => {
-//     res.send(`Your email: ${req.user.email}`);
-// });
+app.get("/", requireAuth, (req, res) => {
+    res.send(`Your email: ${req.user.email}`);
+});
 
 // start server on port 8000
 server.listen(8000, () => console.log("server running on port 8000"));

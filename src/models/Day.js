@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const daySchema = new mongoose.Schema({
   patientId: {
     type: String,
-    unique: true,
     required: true
   },
   patientName: {

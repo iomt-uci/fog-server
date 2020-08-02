@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
+const patientSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
@@ -32,11 +32,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Staff'
   }
-
 });
 
-userSchema.pre('save', function(next) {
+patientSchema.pre('save', function(next) {
   const user = this;
   if (!user.isModified('password')) {
     return next();
@@ -57,7 +60,7 @@ userSchema.pre('save', function(next) {
   });
 });
 
-userSchema.methods.comparePassword = function(candidatePassword) {
+patientSchema.methods.comparePassword = function(candidatePassword) {
   const user = this;
 
   return new Promise((resolve, reject) => {
@@ -75,4 +78,4 @@ userSchema.methods.comparePassword = function(candidatePassword) {
   });
 };
 
-mongoose.model('User', userSchema);
+mongoose.model('Patient', patientSchema);
