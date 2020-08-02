@@ -6,7 +6,7 @@ const User = mongoose.model("User");
 
 const router = express.Router();
 
-router.use(requireAuth);
+// router.use(requireAuth);
 
 router.get("/patient-connect", async (req, res) => {
   const edgeId = req.query.edgeId;

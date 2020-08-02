@@ -13,7 +13,6 @@ const requireAuth = require("./middlewares/requireAuth");
 // get the day model
 const Day = mongoose.model("Day");
 
-
 const app = express();
 
 app.use(bodyParser.json());
