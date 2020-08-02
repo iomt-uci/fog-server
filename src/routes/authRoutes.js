@@ -64,9 +64,6 @@ router.post('/patient-signin', async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
 // used in staff client app; we don't let patients to sign up an account
 router.use(requireAuth);
 
@@ -85,3 +82,5 @@ router.post('/patient-signup', async (req, res) => {
     return res.status(422).send(err.message);
   }
 });
+
+module.exports = router;
