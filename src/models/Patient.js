@@ -29,9 +29,11 @@ const patientSchema = new mongoose.Schema({
     default: '0'
   },
   isCalling: {
-    type: Boolean,
+    type: Number,
+    get: v => Math.round(v),
+    set: v => Math.round(v),
     required: true,
-    default: false
+    default: 0
   },
   doctor: {
     type: mongoose.Schema.Types.ObjectId,

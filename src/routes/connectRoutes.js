@@ -9,10 +9,10 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get("/patient-connect", async (req, res) => {
-  const edgeId = req.query.edgeId;
+  const deviceId = req.query.edgeId;
 
   try {
-    const patient = await Patient.findOne({ deviceId: edgeId });
+    const patient = await Patient.findOne({ deviceId });
     const patient_id = patient._id;
     const patient_name = patient.firstName + " " + patient.lastName;
     const isCalling = patient.isCalling;
@@ -21,9 +21,9 @@ router.get("/patient-connect", async (req, res) => {
        ? patient.firstName.substring(0, 8).toUpperCase() + " " + patient.lastName.substring(0, 1).toUpperCase()
        : patient.firstName.toUpperCase() + " " + patient.lastName.substring(0, 1).toUpperCase();
 
-    res.send({ patient_id, patient_name, patient_display, isCalling });   
+    res.send({ patient_id, patient_name, patient_display, isCalling, deviceId, isConnected: 1 });   
   } catch (err) {
-    res.send({ patient_display: '0' });
+    res.send({ isConnected: 0 });
   }
 });
 

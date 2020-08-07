@@ -65,12 +65,12 @@ router.post('/patient-signin', async (req, res) => {
 });
 
 // used in staff client app; we don't let patients to sign up an account
-// router.use(requireAuth);
+router.use(requireAuth);
 
 router.post('/patient-signup', async (req, res) => {
   const { email, password, firstName, lastName, phoneNum } = req.body;
   const deviceId = "0";
-  const isCalling = false;
+  const isCalling = 0;
 
   try {
     const patient = new Patient({ email, password, firstName, lastName, phoneNum, deviceId, isCalling, doctor: req.user._id});
