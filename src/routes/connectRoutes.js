@@ -78,4 +78,46 @@ router.post("/patient-disconnect", async (req, res) => {
   }
 });
 
+router.post("/patient-cancel-call", async (req, res) => {
+  const { deviceIdInput } = req.body;
+
+  if (!deviceIdInput) {
+    return res.status(422).send({ error: "Please fill in the missing deviceId" });
+  }
+
+  try {
+    const patient = await Patient.findOne({ deviceId: deviceIdInput });
+
+    patient.isCalling = "0";
+
+    await patient.save();
+
+    res.status(200).send({ 
+      message: `Successfully disconnected ${patient.firstName} with device ${deviceIdInput}.` });
+  } catch (err) {
+    res.status(422).send({ error: `Device id ${deviceIdInput} does not seem to be connected.` });
+  }
+});
+
+router.post("/patient-call", async (req, res) => {
+  const { deviceIdInput } = req.body;
+
+  if (!deviceIdInput) {
+    return res.status(422).send({ error: "Please fill in the missing deviceId" });
+  }
+
+  try {
+    const patient = await Patient.findOne({ deviceId: deviceIdInput });
+
+    patient.isCalling = "1";
+
+    await patient.save();
+
+    res.status(200).send({ 
+      message: `Successfully disconnected ${patient.firstName} with device ${deviceIdInput}.` });
+  } catch (err) {
+    res.status(422).send({ error: `Device id ${deviceIdInput} does not seem to be connected.` });
+  }
+});
+
 module.exports = router;
