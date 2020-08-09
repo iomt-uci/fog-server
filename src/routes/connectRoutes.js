@@ -8,8 +8,17 @@ const router = express.Router();
 
 router.use(requireAuth);
 
+router.get("/all_patients", async (req, res) => {
+
+  const patients = await Patient.find({ doctor: req.user._id });
+
+  res.send(patients);
+});
+
 router.get("/patient-connect", async (req, res) => {
+  
   const deviceId = req.query.edgeId;
+  
 
   try {
     const patient = await Patient.findOne({ deviceId });

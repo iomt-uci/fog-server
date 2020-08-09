@@ -68,7 +68,7 @@ mongoose.connection.on("error", (err) => {
 
 // redis config
 const redisPort = 6379;
-const host = "127.0.0.1";
+const host = "10.0.0.15";
 
 // redis client
 const redis = require('redis');
