@@ -39,15 +39,7 @@ router.get("/patient-connect", async (req, res) => {
   const deviceId = req.query.edgeId;
 
   try {
-    const device = await Device.findById(deviceId);
-
-    if (device.isConnected === 0) {
-      return res.send({ isConnected: 0 });
-    }
-
-    // populate/expand connectedTo; replace the patient object id with actual the patient document
-    const deviceDocExpanded = await Device.findOne({_id: deviceId}).populate('connectedTo');
-    const patient = deviceDocExpanded.connectedTo;
+    const patient = await Patient.findOne({ deviceId: deviceIdInput });
 
     const patient_id = patient._id;
     const patient_name = patient.firstName + " " + patient.lastName;
@@ -59,7 +51,7 @@ router.get("/patient-connect", async (req, res) => {
 
     res.send({ patient_id, patient_name, patient_display, isCalling, deviceId, isConnected: 1 });   
   } catch (err) {
-    return res.send({ error: err.message });
+    return res.send({ isConnected: 0 });
   }
 });
 
@@ -101,7 +93,7 @@ router.post("/patient-connect", async (req, res) => {
       return res.status(200).send({ 
         message: `Successfully connected ${patient.firstName} with device ${deviceIdInput}.` 
       });
-      
+
     } else {
       // if not
       return res.status(422).send({ error: `Patient whose phone number is ${phoneNumInput} is not found.` });

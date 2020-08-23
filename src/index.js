@@ -109,23 +109,23 @@ client.on('message', function(channel, message) {
         // a new room has been detected, update wait time for the old room
         // Note: only update when none of fields are missing
         // 6 elements are: patientName, deviceId, bpm, alarm, location, startTime
-        if (Object.keys(dataStream[list[0]]).length === 6) {
-            const filter = {
-                patientId: list[0], 
-                patientName: dataStream[list[0]].patientName,
-                today: getToday()
-            }; 
-            const update = {
-                "$push": { 
-                    "locations": {
-                        "Room": dataStream[list[0]].location,
-                        "duration": Date.now() - dataStream[list[0]].startTime,
-                        "startTime": dataStream[list[0]].startTime
-                    } 
-                }
-            };    
-            updateDB(filter, update);
-        }
+        // if (Object.keys(dataStream[list[0]]).length === 6) {
+        //     const filter = {
+        //         patientId: list[0], 
+        //         patientName: dataStream[list[0]].patientName,
+        //         today: getToday()
+        //     }; 
+        //     const update = {
+        //         "$push": { 
+        //             "locations": {
+        //                 "Room": dataStream[list[0]].location,
+        //                 "duration": Date.now() - dataStream[list[0]].startTime,
+        //                 "startTime": dataStream[list[0]].startTime
+        //             } 
+        //         }
+        //     };    
+        //     updateDB(filter, update);
+        // }
 
         if (location_temp === list[1]) {
             // if the old location (in local dataStream variable) is equal to incoming location,
@@ -150,6 +150,8 @@ client.on('message', function(channel, message) {
 
         // if bpm is meets a threshold, assign alarm value accordingly.
         if (list[3] >= 85) {
+            dataStream[list[0]].alarm = 2;
+        } else if (list[3] >= 20) {
             dataStream[list[0]].alarm = 1;
         } else {
             dataStream[list[0]].alarm = 0;
@@ -163,27 +165,27 @@ client.on('message', function(channel, message) {
 
 
         ////////////////////////////// TO DATABASE /////////////////////////////
-        if (bpmBuffer[list[0]].length === 10) {
+        // if (bpmBuffer[list[0]].length === 10) {
 
-            // after collected 10 bpms, compute bpm avg
-            const avg = arr => arr.reduce((a,b) => parseInt(a)+parseInt(b), 0) / arr.length;
-            const bpmAvg = Math.floor(avg(bpmBuffer[list[0]]));
+        //     // after collected 10 bpms, compute bpm avg
+        //     const avg = arr => arr.reduce((a,b) => parseInt(a)+parseInt(b), 0) / arr.length;
+        //     const bpmAvg = Math.floor(avg(bpmBuffer[list[0]]));
 
-            // clear list once getting the avg for bpm
-            bpmBuffer[list[0]] = [];
+        //     // clear list once getting the avg for bpm
+        //     bpmBuffer[list[0]] = [];
 
-            // insert/update MongoDB 
-            const filter = { 
-                patientId: list[0], 
-                patientName: dataStream[list[0]].patientName,
-                today: getToday()
-            };
-            const update = {
-                "$push": { "bpm": bpmAvg }
-            };
+        //     // insert/update MongoDB 
+        //     const filter = { 
+        //         patientId: list[0], 
+        //         patientName: dataStream[list[0]].patientName,
+        //         today: getToday()
+        //     };
+        //     const update = {
+        //         "$push": { "bpm": bpmAvg }
+        //     };
 
-            updateDB(filter, update);
-        }
+        //     updateDB(filter, update);
+        // }
 
         /////// model prediction in future ////////
     }
@@ -191,6 +193,7 @@ client.on('message', function(channel, message) {
     // socket.io to send message (preferably in json format)
     // Note: only update when none of the elements are missing
     // 6 elements are: patientName, deviceId, bpm, alarm, location, startTime
+    console.log(dataStream);
     if (Object.keys(dataStream[list[0]]).length === 6) {
         const json_str = { patientId: list[0], ...dataStream[list[0]] };
         console.log(json_str);
