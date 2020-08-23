@@ -25,8 +25,8 @@ const patientSchema = new mongoose.Schema({
   },
   deviceId: {
     type: String,
-    required: true,
-    default: '0'
+    ref: 'Device',
+    default: "0"
   },
   isCalling: {
     type: Number,
@@ -35,10 +35,10 @@ const patientSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  doctor: {
+  monitoredBy: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Staff'
-  }
+  }]
 });
 
 patientSchema.pre('save', function(next) {

@@ -1,5 +1,6 @@
-require("./models/Patient");
 require("./models/Staff");
+require("./models/Patient");
+require("./models/Device");
 require("./models/Track");
 require("./models/Day");
 const express = require("express");
@@ -68,7 +69,8 @@ mongoose.connection.on("error", (err) => {
 
 // redis config
 const redisPort = 6379;
-const host = "10.0.0.15";
+// replace ip if needed
+const host = "127.0.0.1";
 
 // redis client
 const redis = require('redis');
@@ -125,7 +127,6 @@ client.on('message', function(channel, message) {
             updateDB(filter, update);
         }
 
-
         if (location_temp === list[1]) {
             // if the old location (in local dataStream variable) is equal to incoming location,
             // location is read the 2nd time; assign "Hallway" as location
@@ -135,7 +136,7 @@ client.on('message', function(channel, message) {
             // if incoming location is not equal to old location,
             // assign the incoming location and set the start time
             dataStream[list[0]].location = list[1];
-            dataStream[list[0]].startTime = Date.now();  
+            dataStream[list[0]].startTime = Date.now();
         }
 
     } 
@@ -148,7 +149,7 @@ client.on('message', function(channel, message) {
         dataStream[list[0]].bpm = list[3];
 
         // if bpm is meets a threshold, assign alarm value accordingly.
-        if (list[3] >= 120) {
+        if (list[3] >= 85) {
             dataStream[list[0]].alarm = 1;
         } else {
             dataStream[list[0]].alarm = 0;

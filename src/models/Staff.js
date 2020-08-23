@@ -22,7 +22,11 @@ const staffSchema = new mongoose.Schema({
   phoneNum: {
     type: String,
     required: true
-  }
+  },
+  patients: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Patient'
+  }]
 });
 
 staffSchema.pre('save', function(next) {
