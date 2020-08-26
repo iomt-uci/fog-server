@@ -26,12 +26,14 @@ router.use(requireAuth);
 
 
 // get all patients belong to that staff
-router.get("/all_patients", async (req, res) => {
+router.get("/active-patients", async (req, res) => {
 
   // populate/expand patients; replace patient object ids with actual patient documents
   const staffDocExpanded = await Staff.findOne({_id: req.user._id}).populate('patients');
 
-  res.send(staffDocExpanded.patients);
+  const activePatients = staffDocExpanded.patients.filter(patient => patient.deviceId !== "0");
+
+  res.send(activePatients);
 });
 
 router.get("/patient-connect", async (req, res) => {
@@ -79,6 +81,9 @@ router.post("/patient-connect", async (req, res) => {
     // device exists, but does patient exist?
     const patient = await Patient.findOne({ phoneNum: phoneNumInput });
     if (patient) {
+      if (patient.deviceId !== "0") {
+        return res.status(422).send({ error: `Patient ${patient.firstName} has been connected to device ${patient.deviceId}` });
+      }
       // it if is, set device id in patients collection
       patient.deviceId = device._id;
 
@@ -99,7 +104,7 @@ router.post("/patient-connect", async (req, res) => {
       return res.status(422).send({ error: `Patient whose phone number is ${phoneNumInput} is not found.` });
     }
   } catch(err) {
-    return res.send({ error: err.message });
+    return res.status(422).send({ error: err.message });
   }
 });
 
@@ -150,6 +155,10 @@ router.post("/patient-call", async (req, res) => {
 
   try {
     const patient = await Patient.findOne({ deviceId: deviceIdInput });
+
+    if (patient.isCalling === 1) {
+      return res.status(422).send({ error: `Patient ${patient.firstName} has been called!!` });
+    }
 
     patient.isCalling = 1;
     await patient.save();      

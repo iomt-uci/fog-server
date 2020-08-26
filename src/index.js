@@ -149,7 +149,7 @@ client.on('message', function(channel, message) {
         dataStream[list[0]].bpm = list[3];
 
         // if bpm is meets a threshold, assign alarm value accordingly.
-        if (list[3] >= 85) {
+        if (list[3] >= 90) {
             dataStream[list[0]].alarm = 2;
         } else if (list[3] >= 20) {
             dataStream[list[0]].alarm = 1;
