@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
+const dataDict = require('../utils/dataDict.js');
 
 const Patient = mongoose.model("Patient");
 const Staff = mongoose.model("Staff");
@@ -10,7 +11,6 @@ const Device = mongoose.model("Device");
 const router = express.Router();
 
 router.use(requireAuth);
-
 
 /////////// testing purpose //////////////
 // router.post('/register-device', async (req, res) => {
@@ -42,7 +42,7 @@ router.get("/active-patients", async (req, res) => {
 
   const activePatients = staffDocExpanded.patients.filter(patient => patient.deviceId !== "0");
 
-  res.send(activePatients);
+  return res.send(activePatients);
 });
 
 router.get("/patient-connect", async (req, res) => {
@@ -50,7 +50,7 @@ router.get("/patient-connect", async (req, res) => {
   const deviceId = req.query.edgeId;
 
   try {
-    const patient = await Patient.findOne({ deviceId: deviceIdInput });
+    const patient = await Patient.findOne({ deviceId });
 
     const patient_id = patient._id;
     const patient_name = patient.firstName + " " + patient.lastName;
@@ -60,7 +60,7 @@ router.get("/patient-connect", async (req, res) => {
        ? patient.firstName.substring(0, 8).toUpperCase() + " " + patient.lastName.substring(0, 1).toUpperCase()
        : patient.firstName.toUpperCase() + " " + patient.lastName.substring(0, 1).toUpperCase();
 
-    res.send({ patient_id, patient_name, patient_display, isCalling, deviceId, isConnected: 1 });   
+    return res.send({ patient_id, patient_name, patient_display, isCalling, deviceId, isConnected: 1 });   
   } catch (err) {
     return res.send({ isConnected: 0 });
   }
@@ -104,6 +104,13 @@ router.post("/patient-connect", async (req, res) => {
       await device.save();
       await patient.save();
 
+      //////////////////////////////////////////////////////////////////////////////
+      // initialize data stream with deviceId, patientId, and patient's full name //
+      //////////////////////////////////////////////////////////////////////////////      
+      dataDict.initializePatient(deviceIdInput, patient._id, patient.firstName + " " + patient.lastName);
+
+      // dataDict.debugDataStream();  
+
       return res.status(200).send({ 
         message: `Successfully connected ${patient.firstName} with device ${deviceIdInput}.` 
       });
@@ -143,6 +150,11 @@ router.post("/patient-disconnect", async (req, res) => {
 
       await patient.save();
       await device.save();
+
+      ///////////////////////////////////////////////////////////////////
+      // reset data stream if a device is not connected to any patient //
+      ///////////////////////////////////////////////////////////////////      
+      dataDict.reset(deviceIdInput);
 
       return res.status(200).send({ 
         message: `Successfully disconnected ${patient.firstName} with device ${deviceIdInput}.` 
