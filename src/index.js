@@ -127,6 +127,19 @@ client.on('message', function(channel, message) {
 
 client.subscribe('heart-rate');
 
+// constantly check if patient has left the device
+setInterval(() => {
+    let dataStream = dataDict.getDataStream();
+    for (let deviceId in dataStream) {
+        if (Object.keys(dataDict.getPatientData(deviceId)).length !== 0 && 
+            Date.now() - dataStream[deviceId].lastUpdated >= 5000) {
+            dataDict.updateBPM(deviceId, 0);
+            const jsonStr = dataDict.parseData(deviceId);
+            io.send(jsonStr);                    
+        }
+    }
+}, 7000);
+
 
 // feel free to disable login for testing purposes
 

@@ -12,6 +12,7 @@ function initializePatient(deviceId, patientId, patientName) {
 	dataStream[deviceId].location = "Hallway";
 	dataStream[deviceId].startTime = Date.now();
 	dataStream[deviceId].prediction = 'I';
+	dataStream[deviceId].lastUpdated = Date.now();
 }
 
 function reset(deviceId) {
@@ -53,6 +54,7 @@ function updateLocation(deviceId, roomName) {
         dataStream[deviceId].location = roomName;
         dataStream[deviceId].startTime = Date.now();
     }
+    dataStream[deviceId].lastUpdated = Date.now();
 }
 
 function updateBPM(deviceId, bpm) {
@@ -95,10 +97,16 @@ function updateBPM(deviceId, bpm) {
 
     //     updateDB(filter, update);
     // }
+    dataStream[deviceId].lastUpdated = Date.now();
 }
 
 function updatePrediction(deviceId, prediction) {
 	dataStream[deviceId].prediction = prediction;
+	dataStream[deviceId].lastUpdated = Date.now();
+}
+
+function getDataStream() {
+	return dataStream;
 }
 
 function getPatientData(deviceId) {
@@ -156,5 +164,6 @@ module.exports = {
 	updatePrediction,
 	debugDataStream,
 	getPatientData,
-	parseData
+	parseData,
+	getDataStream
 };
