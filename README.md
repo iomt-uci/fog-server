@@ -1,4 +1,4 @@
-# Fog API Documentation
+# Fog Server Documentation
 
 ## Introduction
 Fog server serves as a middleware for controlling information flow at UCI Department of Radiation Oncology and aims to provide a layer of abstraction for the frontend mobile apps with API calls.
@@ -10,6 +10,14 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
 * (optional) use ngrok to pass through internal networks: 
   * `./ngrok http -hostname=iomt-uci.ngrok.io 8000`
 * Getting client mobile app ready
+
+## Cautions with Fog Server
+* Valid patient phone numbers are `2001-2006`.
+* Valid device id numbers are `1-3`.
+* The fog server "subscribes" to channel "heart-rate" and expects incoming message strings in the following format:
+  * if `str.split('|').length === 2`, the fog server will receive `<device id>|<room name>`
+  * if `str.split('|').length === 3`, the fog server will receive `<device id>|<prediction label>|<placeholder char>`
+  * if `str.split('|').length === 4`, the fog server will receive `<patient id>|<device id>|<patient name>|<bpm>`
 
 ## Allowed HTTPs requests:
 * GET
