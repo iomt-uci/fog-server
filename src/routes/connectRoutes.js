@@ -24,6 +24,15 @@ router.use(requireAuth);
 //   res.send(device);
 // });
 
+router.get('/staff-name', async (req,res) => {
+  try {
+    const staff = await Staff.findById(req.user._id);
+    return res.send({ staffName: staff.firstName + " " + staff.lastName });    
+  } catch (err) {
+    return res.send({ error: "Sorry, you are not authenticated." });
+  }
+}); 
+
 
 // get all patients belong to that staff
 router.get("/active-patients", async (req, res) => {
