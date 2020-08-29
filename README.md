@@ -19,8 +19,8 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
   * **Usage Frequency**: high
   ```javascript
   const response = await axios.post("https://iomt-uci.ngrok.io/staff-signin", { 
-        email: "staff@test.com"
-        password: "123"
+      email: "staff@test.com",
+      password: "123"
   });
   ```
 
@@ -67,8 +67,8 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
   * **Note**: enter patient's phone number and edge device id that the patient is about to connect to
   ```javascript
   const response = await axios.post("https://iomt-uci.ngrok.io/patient-connect", { 
-        phoneNumInput: "2003"
-        deviceIdInput: "3"
+      phoneNumInput: "2003",
+      deviceIdInput: "3"
   });
   ```
 
@@ -82,7 +82,7 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
   * **Note**: enter the patient's current device's id to disconnect patient from the device, fog server will therefore disregard any incoming information related to the patient
   ```javascript
   const response = await axios.post("https://iomt-uci.ngrok.io/patient-disconnect", { 
-        deviceIdInput: "3"
+      deviceIdInput: "3"
   });
   ```  
 
@@ -108,7 +108,7 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
   * **Note**: the call will trigger the buzzer of the heart rate detector
   ```javascript
   const response = await axios.post("https://iomt-uci.ngrok.io/patient-call", { 
-        deviceIdInput: "3"
+      deviceIdInput: "3"
   });
   ``` 
 
@@ -120,7 +120,7 @@ Fog server serves as a middleware for controlling information flow at UCI Depart
   * **Note**: the cancel call will silence the buzzer of the heart rate detector
   ```javascript
   const response = await axios.post("https://iomt-uci.ngrok.io/patient-cancel-call", { 
-        deviceIdInput: "3"
+      deviceIdInput: "3"
   });
   ``` 
 
