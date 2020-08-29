@@ -3,6 +3,14 @@
 ## Introduction
 Fog server serves as a middleware for controlling information flow at UCI Department of Radiation Oncology and aims to provide a layer of abstraction for the frontend mobile apps with API calls.
 
+## How to Use Fog Server
+* Open Redis, go to Redis directory, `src/redis-server --protected-mode no` to launch Redis
+* Replace ip address of Redis (line 75 in index.js) as needed (I'll assume Redis is together with fog server on one machine)
+* `npm run dev` to start fog server; the default port is `8000`
+* (optional) use ngrok to pass through internal networks: 
+  * `./ngrok http -hostname=iomt-uci.ngrok.io 8000`
+* Getting client mobile app ready
+
 ## Allowed HTTPs requests:
 * GET
 * POST
