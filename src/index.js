@@ -150,9 +150,9 @@ app.get("/", requireAuth, (req, res) => {
 // start server on port 8000
 // server.listen(8000, () => console.log("server running on port 8000"));
 // server.listen();
-const PORT = process.env.PORT || 8000;
+const PORT = 8000;
 
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
+server.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
 
 
 
