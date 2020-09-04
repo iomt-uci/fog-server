@@ -76,7 +76,7 @@ const host = "redis-12427.c92.us-east-1-3.ec2.cloud.redislabs.com";
 
 // redis client
 const redis = require('redis');
-const client = redis.createClient(redisPort, host);
+const client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
 
 // client listening messages
 client.on('message', function(channel, message) {
