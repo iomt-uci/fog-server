@@ -13,6 +13,7 @@ function initializePatient(deviceId, patientId, patientName) {
 	dataStream[deviceId].startTime = Date.now();
 	dataStream[deviceId].prediction = 'I';
 	dataStream[deviceId].lastUpdated = Date.now();
+	dataStream[deviceId].bpmHistory = [0,0,0,0,0];
 }
 
 function reset(deviceId) {
@@ -59,17 +60,50 @@ function updateLocation(deviceId, roomName) {
 
 function updateBPM(deviceId, bpm) {
 
-   // here to process bpm strings
+    // here to process bpm strings; treat list like a queue of 5 elements
     dataStream[deviceId].bpm = bpm;
+    // pop the front element; insert bpm at the end;
+    dataStream[deviceId].bpmHistory.shift();
+    dataStream[deviceId].bpmHistory.push(bpm);
 
-    // if bpm is meets a threshold, assign alarm value accordingly.
-    if (bpm >= 90) {
-        dataStream[deviceId].alarm = 2;
-    } else if (bpm >= 20) {
-        dataStream[deviceId].alarm = 1;
-    } else {
-        dataStream[deviceId].alarm = 0;
+    // red = high rate; green = normal; orange = lower; gray = none
+    let counter_red = 0;
+    let counter_orange = 0;
+    let counter_gray = 0;
+
+    // loop through each element in bpmHistory; counter the number of instances for each scenario
+    for (let beat of dataStream[deviceId].bpmHistory) {
+    	console.log(beat);
+    	if (beat >= 90) {
+    		counter_red += 1;
+    	} else if (beat >= 80) {
+    		continue;
+    	} else if (beat >= 20) {
+    		counter_orange += 1;
+    	} else {
+    		counter_gray += 1;
+    	}
     }
+
+    // counter = 5 means the heart beat has met the <condition> 5 times
+    // if none of the counters = 5, heart beat is normal
+    // e.g. 85, 90, 100, 92, 87
+    // counter_gray = 0, counter_orange = 2, counter_red = 1, heart beat is still normal
+    if (counter_gray === 5) {
+    	dataStream[deviceId].alarm = 0;
+    } else if (counter_orange === 5) {
+        dataStream[deviceId].alarm = 1;
+    } else if (counter_red === 5) {
+        dataStream[deviceId].alarm = 3;
+    } else {
+    	dataStream[deviceId].alarm = 2;
+    }
+
+    // reset counters
+    counter_red = 0;
+    counter_orange = 0;
+    counter_gray = 0;
+
   
     // if patientId is not in bpmBuffer, create an empty object
     // dataStream[deviceId].bpmBuffer.push(bpm);
