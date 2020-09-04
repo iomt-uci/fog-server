@@ -70,9 +70,9 @@ mongoose.connection.on("error", (err) => {
 // ========================== Redis ==========================
 
 // redis config
-const redisPort = 12427;
+const redisPort = 6379;
 // replace ip if needed
-const host = "redis-12427.c92.us-east-1-3.ec2.cloud.redislabs.com";
+const host = "127.0.0.1";
 
 // redis client
 const redis = require('redis');
