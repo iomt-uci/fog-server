@@ -76,7 +76,7 @@ const host = "127.0.0.1";
 
 // redis client
 const redis = require('redis');
-const client = redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+const client = redis.createClient(redisPort, host);
 
 // client listening messages
 client.on('message', function(channel, message) {
