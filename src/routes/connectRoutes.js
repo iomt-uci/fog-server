@@ -72,6 +72,7 @@ router.post("/patient-connect", async (req, res) => {
   if (!phoneNumInput || !deviceIdInput) {
     return res.status(422).send({ error: "Please fill in missing fields." });
   }
+  
 
   try {
     const device = await Device.findById(deviceIdInput);

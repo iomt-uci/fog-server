@@ -1,7 +1,7 @@
 require("./models/Staff");
 require("./models/Patient");
 require("./models/Device");
-require("./models/Track");
+// require("./models/Track");
 require("./models/Day");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,7 +10,7 @@ const dataDict = require('./utils/dataDict.js');
 
 const authRoutes = require("./routes/authRoutes");
 const connectRoutes = require("./routes/connectRoutes");
-const trackRoutes = require("./routes/trackRoutes");
+// const trackRoutes = require("./routes/trackRoutes");
 const historyRoutes = require('./routes/historyRoutes');
 const requireAuth = require("./middlewares/requireAuth");
 
@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(authRoutes);
 app.use(connectRoutes);
-app.use(trackRoutes);
+// app.use(trackRoutes);
 app.use(historyRoutes);
 
 // http server for socket.io
